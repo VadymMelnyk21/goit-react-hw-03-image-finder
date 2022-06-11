@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import Searchbar from '../components/Searchbar/Searchbar';
 import { fetchImage } from '../services/api';
+import ImageGallery from './ImageGallery/ImageGallery';
 
 export default class App extends Component {
   state = {
@@ -39,16 +40,18 @@ export default class App extends Component {
       .then(response => {
         console.log(response);
         this.setState(prevState => ({
-          images: [...prevState.images, response],
+          images: [...prevState.images, ...response.hits],
         }));
       })
       .catch(error => console.log(error));
   };
 
   render() {
+    const { images } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.searchValue} />
+        <ImageGallery images={images} />
       </>
     );
   }
