@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Item, Image } from './ImageGalleryItem.styled';
 
 export default function ImageGalleryItem({ previewImage, alt }) {
@@ -7,3 +8,8 @@ export default function ImageGalleryItem({ previewImage, alt }) {
     </Item>
   );
 }
+
+ImageGalleryItem.propTypes = {
+  previewImage: PropTypes.string.isRequired,
+  alt: PropTypes.string.isRequired,
+};
