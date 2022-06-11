@@ -1,7 +1,9 @@
+import { Item, Image } from './ImageGalleryItem.styled';
+
 export default function ImageGalleryItem({ previewImage, alt }) {
   return (
-    <li>
-      <img src={previewImage} alt={alt} />
-    </li>
+    <Item>
+      <Image src={previewImage} alt={alt} />
+    </Item>
   );
 }
