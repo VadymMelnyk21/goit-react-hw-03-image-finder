@@ -2,6 +2,7 @@ import { Component } from 'react';
 import Searchbar from '../components/Searchbar/Searchbar';
 import { fetchImage } from '../services/api';
 import ImageGallery from './ImageGallery/ImageGallery';
+import Button from './Button/Button';
 
 export default class App extends Component {
   state = {
@@ -19,18 +20,29 @@ export default class App extends Component {
     }
   };
 
+  LoadMore = () => {
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }));
+    console.log(this.state.page);
+  };
+
   componentDidUpdate(prevProps, prevState) {
     const prevImages = prevState.searchQuery;
+    const prevPage = prevState.page;
 
     const nextImages = this.state.searchQuery;
     const nextPage = this.state.page;
 
-    if (prevImages !== nextImages) {
+    if (prevImages !== nextImages || prevPage !== nextPage) {
       this.setState({
-        page: 1,
-        images: [],
+        // page: 1,
+        // images: [],
       });
-      this.fetchGallery(nextImages, nextPage);
+      if (nextPage === 1) {
+        this.setState({ images: [] });
+      }
+      this.fetchGallery();
     }
   }
 
@@ -52,6 +64,7 @@ export default class App extends Component {
       <>
         <Searchbar onSubmit={this.searchValue} />
         <ImageGallery images={images} />
+        <Button onClick={this.LoadMore} />
       </>
     );
   }
