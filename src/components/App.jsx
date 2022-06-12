@@ -3,6 +3,7 @@ import Searchbar from '../components/Searchbar/Searchbar';
 import { fetchImage } from '../services/api';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Button from './Button/Button';
+import Loader from './Loader/Loader';
 
 export default class App extends Component {
   state = {
@@ -65,6 +66,7 @@ export default class App extends Component {
         <Searchbar onSubmit={this.searchValue} />
         <ImageGallery images={images} />
         <Button onClick={this.LoadMore} />
+        <Loader />
       </>
     );
   }
