@@ -9,12 +9,7 @@ export default function ImageGalleryItem({
 }) {
   return (
     <Item>
-      <Image
-        src={previewImage}
-        alt={alt}
-        onClick={onClickImage}
-        data-id={largeImage}
-      />
+      <Image src={previewImage} alt={alt} onClick={onClickImage} />
     </Item>
   );
 }
@@ -22,4 +17,5 @@ export default function ImageGalleryItem({
 ImageGalleryItem.propTypes = {
   previewImage: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,
+  onClickImage: PropTypes.func.isRequired,
 };

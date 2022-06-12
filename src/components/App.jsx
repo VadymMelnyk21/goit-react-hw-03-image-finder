@@ -59,7 +59,7 @@ export default class App extends Component {
       }
       this.fetchGallery();
     }
-    if (prevPage > 1) {
+    if (prevPage !== 1) {
       scroll();
     }
   }
