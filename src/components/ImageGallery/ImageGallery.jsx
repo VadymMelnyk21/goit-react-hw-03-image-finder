@@ -2,11 +2,19 @@ import PropTypes from 'prop-types';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import { List } from './ImageGallery.styled';
 
-export default function ImageGallery({ images }) {
+export default function ImageGallery({ images, toggleModal }) {
   return (
     <List>
-      {images.map(({ id, tags, webformatURL }) => (
-        <ImageGalleryItem key={id} alt={tags} previewImage={webformatURL} />
+      {images.map(({ id, tags, webformatURL, largeImageURL }) => (
+        <ImageGalleryItem
+          key={id}
+          alt={tags}
+          previewImage={webformatURL}
+          largeImage={largeImageURL}
+          onClickImage={() => {
+            toggleModal(largeImageURL);
+          }}
+        />
       ))}
     </List>
   );

@@ -6,6 +6,7 @@ import Button from './Button/Button';
 import Loader from './Loader/Loader';
 import scroll from '../services/scroll';
 import Error from './Error/Error';
+import Modal from './Modal/Modal';
 
 export default class App extends Component {
   state = {
@@ -15,6 +16,8 @@ export default class App extends Component {
     status: 'idle',
     totalHits: 0,
     error: '',
+    showModal: false,
+    modalImage: null,
   };
 
   searchValue = newQuery => {
@@ -33,6 +36,13 @@ export default class App extends Component {
     console.log(this.state.page);
   };
 
+  toggleModal = largeImageURL => {
+    this.setState(({ showModal, modalImage }) => ({
+      showModal: !showModal,
+      modalImage: largeImageURL,
+    }));
+  };
+
   componentDidUpdate(prevProps, prevState) {
     const prevImages = prevState.searchQuery;
     const prevPage = prevState.page;
@@ -41,9 +51,9 @@ export default class App extends Component {
     const nextPage = this.state.page;
 
     if (prevImages !== nextImages || prevPage !== nextPage) {
-      this.setState({
-        status: 'pending',
-      });
+      // this.setState({
+      //   status: 'pending',
+      // });
       if (nextPage === 1) {
         this.setState({ images: [] });
       }
@@ -73,17 +83,27 @@ export default class App extends Component {
   };
 
   render() {
-    const { images, status, error } = this.state;
+    const { images, status, error, showModal, modalImage } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.searchValue} />
-        {status === 'pending' && <Loader />}
-        {status !== 'idle' && <ImageGallery images={images} />}
+
+        {status !== 'idle' && (
+          <ImageGallery images={images} toggleModal={this.toggleModal} />
+        )}
+
         {status === 'resolved' &&
           this.state.images.length !== this.state.totalHits && (
             <Button onClick={this.LoadMore} />
           )}
+
         {status === 'rejected' && <Error message={error} />}
+
+        {status === 'pending' && <Loader />}
+
+        {showModal && (
+          <Modal image={modalImage} closeModal={this.toggleModal} />
+        )}
       </>
     );
   }
