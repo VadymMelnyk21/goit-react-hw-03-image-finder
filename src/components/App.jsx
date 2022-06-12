@@ -33,7 +33,7 @@ export default class App extends Component {
     this.setState(prevState => ({
       page: prevState.page + 1,
     }));
-    console.log(this.state.page);
+    // console.log(this.state.page);
   };
 
   toggleModal = largeImageURL => {
@@ -43,7 +43,7 @@ export default class App extends Component {
     }));
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(_, prevState) {
     const prevImages = prevState.searchQuery;
     const prevPage = prevState.page;
 
@@ -51,31 +51,29 @@ export default class App extends Component {
     const nextPage = this.state.page;
 
     if (prevImages !== nextImages || prevPage !== nextPage) {
-      // this.setState({
-      //   status: 'pending',
-      // });
+      this.setState({
+        status: 'pending',
+      });
       if (nextPage === 1) {
         this.setState({ images: [] });
       }
       this.fetchGallery();
     }
-    if (prevPage !== 1) {
-      scroll();
-    }
   }
 
   fetchGallery = () => {
     const { searchQuery, page } = this.state;
-    this.setState({ status: 'pending' });
 
     fetchImage(searchQuery, page)
       .then(response => {
-        console.log(response);
+        // console.log(response);
         this.setState(prevState => ({
           images: [...prevState.images, ...response.hits],
           status: 'resolved',
           totalHits: response.totalHits,
         }));
+
+        scroll();
       })
       .catch(error =>
         this.setState({ error: error.message, status: 'rejected' })
@@ -83,19 +81,20 @@ export default class App extends Component {
   };
 
   render() {
-    const { images, status, error, showModal, modalImage } = this.state;
+    const { images, status, error, showModal, modalImage, totalHits } =
+      this.state;
+
     return (
       <>
         <Searchbar onSubmit={this.searchValue} />
 
-        {status !== 'idle' && (
+        {status !== 'idle' && images.length > 0 && (
           <ImageGallery images={images} toggleModal={this.toggleModal} />
         )}
 
-        {status === 'resolved' &&
-          this.state.images.length !== this.state.totalHits && (
-            <Button onClick={this.LoadMore} />
-          )}
+        {status === 'resolved' && images.length !== totalHits && (
+          <Button onClick={this.LoadMore} />
+        )}
 
         {status === 'rejected' && <Error message={error} />}
 
