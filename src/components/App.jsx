@@ -5,14 +5,16 @@ import ImageGallery from './ImageGallery/ImageGallery';
 import Button from './Button/Button';
 import Loader from './Loader/Loader';
 import scroll from '../services/scroll';
+import Error from './Error/Error';
 
 export default class App extends Component {
   state = {
     searchQuery: '',
     page: 1,
     images: [],
-    status: null,
+    status: 'idle',
     totalHits: 0,
+    error: '',
   };
 
   searchValue = newQuery => {
@@ -65,20 +67,23 @@ export default class App extends Component {
           totalHits: response.totalHits,
         }));
       })
-      .catch(error => console.log(error));
+      .catch(error =>
+        this.setState({ error: error.message, status: 'rejected' })
+      );
   };
 
   render() {
-    const { images, status } = this.state;
+    const { images, status, error } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.searchValue} />
-        <ImageGallery images={images} />
+        {status === 'pending' && <Loader />}
+        {status !== 'idle' && <ImageGallery images={images} />}
         {status === 'resolved' &&
           this.state.images.length !== this.state.totalHits && (
             <Button onClick={this.LoadMore} />
           )}
-        {status === 'pending' && <Loader />}
+        {status === 'rejected' && <Error message={error} />}
       </>
     );
   }
