@@ -45,6 +45,7 @@ export default class App extends Component {
 
   errorString = () => {
     this.setState({
+      images: [],
       status: 'rejected',
       error: 'На порожню стрічку запит не відбувається!',
     });
