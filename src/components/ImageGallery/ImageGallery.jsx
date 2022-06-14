@@ -10,7 +10,6 @@ export default function ImageGallery({ images, toggleModal }) {
           key={id}
           alt={tags}
           previewImage={webformatURL}
-          largeImage={largeImageURL}
           onClickImage={() => {
             toggleModal(largeImageURL);
           }}

@@ -18,8 +18,9 @@ export default class Searchbar extends Component {
 
   formSubmit = e => {
     e.preventDefault();
-    if (this.state.searchQuery === '') {
-      alert('Ваш запит не коректний');
+    if (this.state.searchQuery.trim() === '') {
+      // alert('Ваш запит не коректний');
+      this.props.value();
       return;
     }
     this.props.onSubmit(this.state.searchQuery);

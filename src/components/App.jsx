@@ -43,6 +43,13 @@ export default class App extends Component {
     }));
   };
 
+  errorString = () => {
+    this.setState({
+      status: 'rejected',
+      error: 'На порожню стрічку запит не відбувається!',
+    });
+  };
+
   componentDidUpdate(_, prevState) {
     const prevImages = prevState.searchQuery;
     const prevPage = prevState.page;
@@ -73,6 +80,13 @@ export default class App extends Component {
           totalHits: response.totalHits,
         }));
 
+        if (response.hits.length === 0) {
+          this.setState({
+            status: 'rejected',
+            error: 'По вашому запиту нічого не знайдено!',
+          });
+        }
+
         scroll();
       })
       .catch(error =>
@@ -86,7 +100,7 @@ export default class App extends Component {
 
     return (
       <>
-        <Searchbar onSubmit={this.searchValue} />
+        <Searchbar onSubmit={this.searchValue} value={this.errorString} />
 
         {status !== 'idle' && images.length > 0 && (
           <ImageGallery images={images} toggleModal={this.toggleModal} />
